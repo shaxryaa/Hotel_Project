@@ -38,7 +38,6 @@ const Hero = () => {
           </div>
           
           <div className="md:w-1/2">
-            {/* Right side empty space */}
           </div>
 
         </div>

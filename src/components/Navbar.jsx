@@ -14,13 +14,11 @@ const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
   
-  // Check if current page is homepage
   const isHomepage = pathname === "/";
 
-  // Check authentication state
+
   useEffect(() => {
-    // Optimistically load user from localStorage for immediate UI update,
-    // then validate token with the server.
+
     try {
       const stored = typeof window !== 'undefined' ? localStorage.getItem('user') : null
       if (stored) setUser(JSON.parse(stored))
@@ -31,7 +29,6 @@ const Navbar = () => {
     checkAuth();
   }, []);
 
-  // Refresh auth state when pathname changes (after login/signup)
   useEffect(() => {
     if (pathname === '/' || pathname === '/login' || pathname === '/signup') {
       checkAuth();
@@ -40,7 +37,6 @@ const Navbar = () => {
 
   const checkAuth = async () => {
     try {
-      // Send token from localStorage in Authorization header (Bearer)
       const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
       const response = await fetch('/api/auth/me', {
         headers: token ? { Authorization: `Bearer ${token}` } : {}
@@ -51,7 +47,6 @@ const Navbar = () => {
         try { localStorage.setItem('user', JSON.stringify(data.user)) } catch (e) {}
       } else {
         setUser(null);
-        // token invalid or expired - clear local storage
         try { localStorage.removeItem('token'); localStorage.removeItem('user') } catch (e) {}
       }
     } catch (error) {
@@ -69,7 +64,6 @@ const Navbar = () => {
       });
 
       if (response.ok) {
-        // Clear local token and user as client is responsible for token storage
         try { localStorage.removeItem('token'); localStorage.removeItem('user') } catch (e) {}
         setUser(null);
         toast.success('Logged out successfully');
