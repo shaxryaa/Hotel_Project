@@ -19,6 +19,15 @@ const Navbar = () => {
 
   // Check authentication state
   useEffect(() => {
+    // Optimistically load user from localStorage for immediate UI update,
+    // then validate token with the server.
+    try {
+      const stored = typeof window !== 'undefined' ? localStorage.getItem('user') : null
+      if (stored) setUser(JSON.parse(stored))
+    } catch (e) {
+      console.error('Failed to parse user from localStorage', e)
+    }
+
     checkAuth();
   }, []);
 
@@ -39,11 +48,15 @@ const Navbar = () => {
       if (response.ok) {
         const data = await response.json();
         setUser(data.user);
+        try { localStorage.setItem('user', JSON.stringify(data.user)) } catch (e) {}
       } else {
         setUser(null);
+        // token invalid or expired - clear local storage
+        try { localStorage.removeItem('token'); localStorage.removeItem('user') } catch (e) {}
       }
     } catch (error) {
       setUser(null);
+      try { localStorage.removeItem('token'); localStorage.removeItem('user') } catch (e) {}
     } finally {
       setLoading(false);
     }
@@ -56,8 +69,8 @@ const Navbar = () => {
       });
 
       if (response.ok) {
-        // Clear local token as client is responsible for token storage
-        try { localStorage.removeItem('token') } catch (e) {}
+        // Clear local token and user as client is responsible for token storage
+        try { localStorage.removeItem('token'); localStorage.removeItem('user') } catch (e) {}
         setUser(null);
         toast.success('Logged out successfully');
         router.push('/');

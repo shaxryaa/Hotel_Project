@@ -45,6 +45,15 @@ export default function SignupPage() {
           }
         }
 
+        // Save user to localStorage for immediate UI update if provided
+        if (data?.user) {
+          try {
+            localStorage.setItem('user', JSON.stringify(data.user))
+          } catch (e) {
+            console.error('Failed to save user to localStorage', e)
+          }
+        }
+
         toast.success('Account created successfully!')
         router.push('/')
         router.refresh()
