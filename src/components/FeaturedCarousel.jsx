@@ -1,108 +1,8 @@
 'use client';
-import React, { useState } from "react";
-
-const featuredItems = [
-  {
-    id: 1,
-    title: "Deluxe Suite",
-    location: "Bandra West, Mumbai",
-    beds: 4,
-    baths: 3,
-    sqft: 2500,
-    price: 4350,
-    rating: 4.8,
-    image: "/hotelimage1.jpg",
-  },
-  {
-    id: 2,
-    title: "Luxury Villa",
-    location: "Satellite, Ahmedabad",
-    beds: 5,
-    baths: 4,
-    sqft: 3500,
-    price: 5200,
-    rating: 4.7,
-    image: "/hotelimage2.webp",
-  },
-  {
-    id: 3,
-    title: "Beachfront Villa",
-    location: "Candolim Beach, Goa",
-    beds: 4,
-    baths: 4,
-    sqft: 4500,
-    price: 6100,
-    rating: 4.9,
-    image: "/hotelimage3.jpg",
-  },
-  {
-    id: 4,
-    title: "Modern Apartment",
-    location: "Bandra West, Mumbai",
-    beds: 3,
-    baths: 2,
-    sqft: 1500,
-    price: 3750,
-    rating: 4.6,
-    image: "/hotelimage4.webp",
-  },
-  {
-    id: 5,
-    title: "Countryside House",
-    location: "Ooty, Tamil Nadu",
-    beds: 4,
-    baths: 3,
-    sqft: 3200,
-    price: 4100,
-    rating: 4.7,
-    image: "/hotelimage5.jpeg",
-  },
-  {
-    id: 6,
-    title: "Cozy House",
-    location: "Old Manali, Himachal Pradesh",
-    beds: 3,
-    baths: 3,
-    sqft: 3500,
-    price: 3900,
-    rating: 4.8,
-    image: "/hotelimage6.webp",
-  },
-  {
-    id: 7,
-    title: "Royal Heritage Hotel",
-    location: "Rajpath, Jaipur",
-    beds: 4,
-    baths: 3,
-    sqft: 4000,
-    price: 5000,
-    rating: 4.6,
-    image: "/hotelimage7.jpg",
-  },
-  {
-    id: 8,
-    title: "City Central Hotel",
-    location: "Connaught Place, Delhi",
-    beds: 3,
-    baths: 2,
-    sqft: 2500,
-    price: 3000,
-    rating: 4.6,
-    image: "/hotelimage8.jpg",
-  },
-  {
-    id: 9,
-    title: "Mountain Escape",
-    location: "Shimla Hills",
-    beds: 3,
-    baths: 2,
-    sqft: 3000,
-    price: 5000,
-    rating: 4.8,
-    image: "/hotelimage9.jpg",
-  },
-];
-
+import React from "react";
+import Link from "next/link";
+import { featuredHotels } from "@/data/hotels";
+import { useFavorites } from "@/hooks/useFavorites";
 
 const StarIcon = () => (
   <svg className="h-4 w-4 text-orange-500 mr-1 inline" fill="currentColor" viewBox="0 0 20 20">
@@ -111,32 +11,27 @@ const StarIcon = () => (
 );
 
 const FeaturedCarousel = () => {
-  const [liked, setLiked] = useState({});
 
-  const toggleLike = (id) => {
-    setLiked((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  };
+  const { isFavorite, toggleFavorite } = useFavorites();
   return (
     <section className="py-16 px-6 bg-gray-50">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-4xl font-bold mb-8 text-center">Featured Hotels</h2>
         <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide scroll-smooth">
-          {featuredItems.map((item) => (
+          {featuredHotels.map((item) => (
             <div
               key={item.id}
               className="min-w-[300px] max-w-sm bg-white rounded-xl shadow-lg overflow-hidden relative group"
             >
               <button
                 className="absolute top-2 right-2 z-10 p-1.5 rounded-full bg-white/80 hover:bg-white transition-colors"
-                onClick={() => toggleLike(item.id)}
+                onClick={() => toggleFavorite(item.id)}
+                aria-label={isFavorite(item.id) ? "Remove from favourites" : "Add to favourites"}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className={`h-5 w-5 ${liked[item.id] ? "text-red-500" : "text-gray-400"}`}
-                  fill={liked[item.id] ? "currentColor" : "none"}
+                  className={`h-5 w-5 ${isFavorite(item.id) ? "text-red-500" : "text-gray-400"}`}
+                  fill={isFavorite(item.id) ? "currentColor" : "none"}
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
@@ -156,26 +51,25 @@ const FeaturedCarousel = () => {
                 />
               </div>
               <div className="p-4">
-                <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                <p className="text-gray-600 text-sm mb-3 flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  {item.location}
-                </p>
-                <div className="flex justify-between text-sm text-gray-600 mb-3">
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-800">{item.title}</h3>
+                    <p className="text-gray-500 text-sm">{item.location}</p>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center text-sm text-gray-600 mb-3">
                   <span className="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7h18M3 7a2 2 0 012-2h12a2 2 0 012 2M3 7v10a2 2 0 002 2h12a2 2 0 002-2V7m-5 4h.01M12 11h.01M9 11h.01" />
                     </svg>
-                    {item.beds} Beds
+                    {item.beds} beds
                   </span>
                   <span className="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 21v-8a2 2 0 012-2h12a2 2 0 012 2v8" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 21V9a3 3 0 016 0v12" />
                     </svg>
-                    {item.baths} Baths
+                    {item.baths} baths
                   </span>
                   <span className="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -187,17 +81,29 @@ const FeaturedCarousel = () => {
                 <div className="flex justify-between items-center mb-3">
                   <span className="flex items-center text-orange-500 font-medium text-base">
                     <StarIcon /> {item.rating}
+                    <span className="text-gray-500 text-xs ml-1">({item.ratingCount})</span>
                   </span>
                   <span className="text-lg font-bold text-gray-800">
                     ₹{item.price}/<span className="text-gray-400 text-base">night</span>
                   </span>
                 </div>
-                <button className="w-full py-3 bg-gray-100 text-lg text-gray-800 rounded-xl font-medium hover:bg-gray-200 transition-colors">
+                <Link
+                  href={`/hotels/${item.id}`}
+                  className="w-full inline-flex justify-center py-3 bg-gray-100 text-lg text-gray-800 rounded-xl font-medium hover:bg-gray-200 transition-colors"
+                >
                   Book Now
-                </button>
+                </Link>
               </div>
             </div>
           ))}
+        </div>
+        <div className="mt-6 flex justify-center">
+          <Link
+            href="/hotels"
+            className="px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors"
+          >
+            See more hotels
+          </Link>
         </div>
       </div>
     </section>

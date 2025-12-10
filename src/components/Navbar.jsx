@@ -107,6 +107,7 @@ const Navbar = () => {
             <Link href="/about" className={`${scrolled ? 'text-base text-gray-700 hover:text-blue-600' : (isHomepage ? 'text-lg text-white hover:text-blue-200' : 'text-lg text-gray-700 hover:text-blue-600')}`}>About</Link>
             <Link href="/services" className={`${scrolled ? 'text-base text-gray-700 hover:text-blue-600' : (isHomepage ? 'text-lg text-white hover:text-blue-200' : 'text-lg text-gray-700 hover:text-blue-600')}`}>Services</Link>
             <Link href="/blog" className={`${scrolled ? 'text-base text-gray-700 hover:text-blue-600' : (isHomepage ? 'text-lg text-white hover:text-blue-200' : 'text-lg text-gray-700 hover:text-blue-600')}`}>Blog</Link>
+            <Link href="/favourites" className={`${scrolled ? 'text-base text-gray-700 hover:text-blue-600' : (isHomepage ? 'text-lg text-white hover:text-blue-200' : 'text-lg text-gray-700 hover:text-blue-600')}`}>Favourites</Link>
           </div>
 
           
@@ -183,6 +184,13 @@ const Navbar = () => {
             className={`block ${scrolled ? 'text-base text-gray-700' : (isHomepage ? 'text-lg text-white' : 'text-lg text-gray-700')}`}
           >
             Blog
+          </Link>
+          <Link
+            href="/favourites"
+            onClick={toggleMenu}
+            className={`block ${scrolled ? 'text-base text-gray-700' : (isHomepage ? 'text-lg text-white' : 'text-lg text-gray-700')}`}
+          >
+            Favourites
           </Link>
           {loading ? (
             <div className={`block ${scrolled ? 'text-base text-gray-600' : (isHomepage ? 'text-lg text-white' : 'text-lg text-gray-600')}`}>

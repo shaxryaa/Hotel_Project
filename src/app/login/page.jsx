@@ -35,7 +35,6 @@ const LoginPage = () => {
       const data = await response.json()
 
       if (response.ok) {
-        // Save token from response into localStorage
         if (data?.token) {
           try {
             localStorage.setItem('token', data.token)
@@ -44,7 +43,6 @@ const LoginPage = () => {
           }
         }
 
-        // Save user to localStorage for immediate UI update if provided
         if (data?.user) {
           try {
             localStorage.setItem('user', JSON.stringify(data.user))

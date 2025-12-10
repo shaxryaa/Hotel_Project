@@ -4,7 +4,6 @@ import { verifyToken } from '@/lib/jwt'
 
 export async function GET(request) {
   try {
-    // Accept token from Authorization header first, then cookie as fallback
     const authHeader = request.headers.get('authorization') || ''
     const tokenFromHeader = authHeader.startsWith('Bearer ')
       ? authHeader.split(' ')[1]
