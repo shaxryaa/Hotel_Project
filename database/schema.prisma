@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User{
+  id Int @id @default(autoincrement())
+  name String 
+  email String @unique 
+  password String 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  bookings  Booking[]
+  reviews   Review[]
+  isAdmin   Boolean   @default(false)
+}
+
+model Hotel {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  city        String
+  country     String
+  address     String
+  mainImage   String?
+  images      String[]
+  amenities   String[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  rooms       Room[]
+  reviews     Review[]
+}
+
+model Room {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  price       Float
+  capacity    Int
+  amenities   String[]
+  hotelId     Int
+  hotel       Hotel     @relation(fields: [hotelId], references: [id])
+  bookings    Booking[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+model Booking {
+  id          Int           @id @default(autoincrement())
+  userId      Int
+  user        User          @relation(fields: [userId], references: [id])
+  roomId      Int
+  room        Room          @relation(fields: [roomId], references: [id])
+  checkIn     DateTime
+  checkOut    DateTime
+  totalPrice  Float
+  status      BookingStatus @default(PENDING)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  rating    Int
+  comment   String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  hotelId   Int
+  hotel     Hotel    @relation(fields: [hotelId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -1,9 +1,9 @@
 import React from 'react'
-import Hero from "@/components/Hero";
-import FeaturedCarousel from "@/components/FeaturedCarousel";
-import SellingPoints from "@/components/SellingPoints";
-import TestimonialCarousel from "@/components/TestimonialCarousel";
-import PopularDestinationsCarousel from "@/components/PopularDestinationsCarousel";
+import Hero from "@/frontend/components/home/Hero";
+import FeaturedCarousel from "@/frontend/components/home/FeaturedCarousel";
+import SellingPoints from "@/frontend/components/home/SellingPoints";
+import TestimonialCarousel from "@/frontend/components/home/TestimonialCarousel";
+import PopularDestinationsCarousel from "@/frontend/components/home/PopularDestinationsCarousel";
 
 const Homepage = () => {
   return (

@@ -1,11 +1,54 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { hotels } from "@/data/hotels";
-import { useSearch } from "@/hooks/useSearch";
+// import { hotels } from "@/data/hotels";
+import { useSearch } from "@/frontend/hooks/useSearch";
+import { useEffect } from "react";
 
 const HotelsPage = () => {
-  const { query, setQuery, filtered } = useSearch(hotels, (h) => h.title);
+  const [hotelsData, setHotelsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/hotels')
+      .then(res => res.json())
+      .then(data => {
+        if (data.hotels) {
+          const adapted = data.hotels.map(h => {
+            // Calculate starting price
+            const price = h.rooms?.length > 0
+              ? Math.min(...h.rooms.map(r => r.price))
+              : 'N/A';
+            // Calculate rating
+            const rating = h.reviews?.length > 0
+              ? (h.reviews.reduce((acc, r) => acc + r.rating, 0) / h.reviews.length).toFixed(1)
+              : 'New';
+
+            return {
+              id: h.id,
+              title: h.name,
+              location: `${h.city}, ${h.country}`,
+              description: h.description,
+              price,
+              image: h.mainImage || h.images[0] || '/placeholder.jpg', // You might want a real placeholder
+              rating
+            };
+          });
+          setHotelsData(adapted);
+        }
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, []);
+
+  const { query, setQuery, filtered } = useSearch(hotelsData, (h) => h.title);
+
+  if (loading) return <div className="p-12 text-center">Loading hotels...</div>;
+  if (hotelsData.length === 0) return <div className="p-12 text-center">No hotels found.</div>;
+
   return (
     <main className="max-w-7xl mx-auto px-6 py-12">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">

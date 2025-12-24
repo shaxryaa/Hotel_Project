@@ -13,7 +13,7 @@ const Navbar = () => {
   const [loading, setLoading] = useState(true);
   const pathname = usePathname();
   const router = useRouter();
-  
+
   const isHomepage = pathname === "/";
 
 
@@ -44,14 +44,14 @@ const Navbar = () => {
       if (response.ok) {
         const data = await response.json();
         setUser(data.user);
-        try { localStorage.setItem('user', JSON.stringify(data.user)) } catch (e) {}
+        try { localStorage.setItem('user', JSON.stringify(data.user)) } catch (e) { }
       } else {
         setUser(null);
-        try { localStorage.removeItem('token'); localStorage.removeItem('user') } catch (e) {}
+        try { localStorage.removeItem('token'); localStorage.removeItem('user') } catch (e) { }
       }
     } catch (error) {
       setUser(null);
-      try { localStorage.removeItem('token'); localStorage.removeItem('user') } catch (e) {}
+      try { localStorage.removeItem('token'); localStorage.removeItem('user') } catch (e) { }
     } finally {
       setLoading(false);
     }
@@ -64,7 +64,7 @@ const Navbar = () => {
       });
 
       if (response.ok) {
-        try { localStorage.removeItem('token'); localStorage.removeItem('user') } catch (e) {}
+        try { localStorage.removeItem('token'); localStorage.removeItem('user') } catch (e) { }
         setUser(null);
         toast.success('Logged out successfully');
         router.push('/');
@@ -96,21 +96,22 @@ const Navbar = () => {
   return (
     <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}>
       <div className={`max-w-7xl mx-auto px-4 ${scrolled ? 'py-3' : 'py-5'} flex items-center justify-between`}>
-        
+
         <Link href="/" className={`font-bold ${scrolled ? 'text-xl text-blue-600' : (isHomepage ? 'text-2xl text-white' : 'text-2xl text-blue-600')}`}>StayKaro</Link>
 
-        
+
         <div className="hidden md:flex items-center w-full justify-between">
-          
+
           <div className="flex-1 flex justify-center space-x-6">
             <Link href="/" className={`${scrolled ? 'text-base text-gray-700 hover:text-blue-600' : (isHomepage ? 'text-lg text-white hover:text-blue-200' : 'text-lg text-gray-700 hover:text-blue-600')}`}>Home</Link>
             <Link href="/about" className={`${scrolled ? 'text-base text-gray-700 hover:text-blue-600' : (isHomepage ? 'text-lg text-white hover:text-blue-200' : 'text-lg text-gray-700 hover:text-blue-600')}`}>About</Link>
             <Link href="/services" className={`${scrolled ? 'text-base text-gray-700 hover:text-blue-600' : (isHomepage ? 'text-lg text-white hover:text-blue-200' : 'text-lg text-gray-700 hover:text-blue-600')}`}>Services</Link>
             <Link href="/blog" className={`${scrolled ? 'text-base text-gray-700 hover:text-blue-600' : (isHomepage ? 'text-lg text-white hover:text-blue-200' : 'text-lg text-gray-700 hover:text-blue-600')}`}>Blog</Link>
             <Link href="/favourites" className={`${scrolled ? 'text-base text-gray-700 hover:text-blue-600' : (isHomepage ? 'text-lg text-white hover:text-blue-200' : 'text-lg text-gray-700 hover:text-blue-600')}`}>Favourites</Link>
+            <Link href="/my-bookings" className={`${scrolled ? 'text-base text-gray-700 hover:text-blue-600' : (isHomepage ? 'text-lg text-white hover:text-blue-200' : 'text-lg text-gray-700 hover:text-blue-600')}`}>My Bookings</Link>
           </div>
 
-          
+
           <div className="flex items-center space-x-3">
             {loading ? (
               <div className={`px-4 py-2 ${scrolled ? 'text-gray-600' : (isHomepage ? 'text-white' : 'text-gray-600')}`}>
@@ -132,14 +133,14 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Link 
-                  href="/login" 
+                <Link
+                  href="/login"
                   className={`px-4 py-2 rounded transition ${scrolled ? 'bg-blue-600 text-white hover:bg-blue-700' : (isHomepage ? 'bg-white text-black hover:bg-gray-200' : 'bg-blue-600 text-white hover:bg-blue-700')}`}
                 >
                   Sign In
                 </Link>
-                <Link 
-                  href="/signup" 
+                <Link
+                  href="/signup"
                   className={`px-4 py-2 rounded transition ${scrolled ? 'bg-blue-600 text-white hover:bg-blue-700' : (isHomepage ? 'bg-white text-black hover:bg-gray-200' : 'bg-blue-600 text-white hover:bg-blue-700')}`}
                 >
                   Sign Up
@@ -150,7 +151,7 @@ const Navbar = () => {
         </div>
 
 
-        
+
         <div className="md:hidden">
           <button onClick={toggleMenu} className={scrolled ? 'text-gray-700' : (isHomepage ? 'text-white' : 'text-gray-700')}>
             {isOpen ? <X size={scrolled ? 28 : 32} /> : <Menu size={scrolled ? 28 : 32} />}
@@ -158,7 +159,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      
+
       {isOpen && (
         <div className={`md:hidden px-6 pb-4 space-y-4 ${scrolled ? 'pt-2 bg-white' : (isHomepage ? 'pt-3 bg-black bg-opacity-80' : 'pt-3 bg-white')}`}>
           <Link href="/" onClick={toggleMenu} className={`block ${scrolled ? 'text-base text-gray-700' : (isHomepage ? 'text-lg text-white' : 'text-lg text-gray-700')}`}>

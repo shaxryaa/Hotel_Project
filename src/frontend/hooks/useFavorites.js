@@ -2,15 +2,10 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-/**
- * Simple favourites store using localStorage.
- * Stores an array of hotel IDs under key `favorites`.
- */
 export function useFavorites() {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Load favourites from localStorage on mount
   useEffect(() => {
     try {
       const stored = typeof window !== 'undefined' ? localStorage.getItem('favorites') : null;
@@ -29,7 +24,6 @@ export function useFavorites() {
         localStorage.setItem('favorites', JSON.stringify(next));
       }
     } catch (_) {
-      // ignore storage errors
     }
   };
 

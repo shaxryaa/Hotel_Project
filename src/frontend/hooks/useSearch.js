@@ -2,10 +2,6 @@
 
 import { useMemo, useState } from 'react';
 
-/**
- * Generic search hook for arrays. Provide items and a selector that
- * returns a string to match against (e.g., hotel.title).
- */
 export function useSearch(items, selector) {
   const [query, setQuery] = useState('');
 

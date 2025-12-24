@@ -1,8 +1,8 @@
 import React from "react";
-import HeroSectionAbout from "@/components/HeroSectionAbout";
-import CompanyHistory from "@/components/CompanyHistory";
-import MissionVision from "@/components/MissionVision";
-import TeamCarousel from "@/components/TeamCarousel";
+import HeroSectionAbout from "@/frontend/components/about/HeroSectionAbout";
+import CompanyHistory from "@/frontend/components/about/CompanyHistory";
+import MissionVision from "@/frontend/components/about/MissionVision";
+import TeamCarousel from "@/frontend/components/about/TeamCarousel";
 
 const AboutPage = () => {
   return (

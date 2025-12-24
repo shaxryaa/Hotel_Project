@@ -1,6 +1,6 @@
 import React from 'react'
-import BlogHero from '@/components/BlogHero';
-import FeaturedBlogsCarousel from '@/components/FeaturedBlogsCarousel'
+import BlogHero from '@/frontend/components/blog/BlogHero';
+import FeaturedBlogsCarousel from '@/frontend/components/blog/FeaturedBlogsCarousel'
 const blogs = [
   {
     title: 'Top 10 Destinations for Summer 2025',

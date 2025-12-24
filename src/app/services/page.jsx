@@ -1,6 +1,6 @@
 import React from "react";
-import ServicesCarousel from "@/components/ServicesCarousel";
-import FaqAccordion from '@/components/FaqAccordion';
+import ServicesCarousel from "@/frontend/components/services/ServicesCarousel";
+import FaqAccordion from '@/frontend/components/common/FaqAccordion';
 
 const services = () => {
   return (
@@ -13,8 +13,8 @@ const services = () => {
           </div>
         </div>
       </section>
-      <ServicesCarousel/>
-      <FaqAccordion/>
+      <ServicesCarousel />
+      <FaqAccordion />
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
-import prisma from '@/lib/prisma.js';
-import { generateToken } from '@/lib/jwt'
+import prisma from '@/backend/lib/prisma.js';
+import { generateToken } from '@/backend/lib/jwt'
 
 export async function POST(request) {
   try {

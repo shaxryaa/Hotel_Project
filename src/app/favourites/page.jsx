@@ -1,11 +1,51 @@
 'use client';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useFavorites } from '@/hooks/useFavorites';
-import { hotels } from '@/data/hotels';
+import { useFavorites } from '@/frontend/hooks/useFavorites';
 
 const FavouritesPage = () => {
-  const { favorites, loading } = useFavorites();
-  const favouriteHotels = hotels.filter((h) => favorites.includes(h.id));
+  const { favorites } = useFavorites();
+  const [favouriteHotels, setFavouriteHotels] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Determine if we have favorites to load
+    if (favorites.length === 0) {
+      setFavouriteHotels([]);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    fetch('/api/hotels')
+      .then(res => res.json())
+      .then(data => {
+        if (data.hotels) {
+          const processed = data.hotels
+            .filter(hotel => favorites.includes(hotel.id))
+            .map(hotel => {
+              const prices = hotel.rooms?.map(r => r.price) || [];
+              const minPrice = prices.length > 0 ? Math.min(...prices) : 'N/A';
+
+              const totalRating = hotel.reviews?.reduce((acc, review) => acc + review.rating, 0) || 0;
+              const avgRating = hotel.reviews?.length > 0 ? (totalRating / hotel.reviews.length).toFixed(1) : "New";
+
+              return {
+                ...hotel,
+                title: hotel.name, // Adapt for UI
+                location: `${hotel.city}, ${hotel.country}`,
+                price: minPrice,
+                rating: avgRating,
+                image: hotel.mainImage || '/hotel1.jpg',
+                description: hotel.description
+              };
+            });
+          setFavouriteHotels(processed);
+        }
+      })
+      .catch(err => console.error("Failed to load favourites", err))
+      .finally(() => setLoading(false));
+  }, [favorites]);
 
   return (
     <main className="max-w-7xl mx-auto px-6 py-12">
